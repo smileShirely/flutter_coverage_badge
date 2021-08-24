@@ -29,11 +29,7 @@ Future main(List<String> args) async {
   //});
   final coverageFile = File('coverage/lcov.info');
 
-  final lineCoverage = calculateLineCoverage(coverageFile);
-
-  for (final excludeItem in excludeList) {
-    await excludeCoverage(Directory.current.path, excludeItem);
-  }
+  final lineCoverage = calculateLineCoverage(coverageFile, excludeList);
 
   generateBadge(package, lineCoverage);
   return;

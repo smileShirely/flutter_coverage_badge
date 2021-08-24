@@ -13,30 +13,29 @@ Future runTestsWithCoverage(String packageRoot) async {
   print('exit code: ${await process.exitCode}');
 }
 
-double calculateLineCoverage(File lcovReport) {
+double calculateLineCoverage(
+    File lcovReport, List<String> excludeFilePathList) {
   final report = Report.fromCoverage(lcovReport.readAsStringSync());
+
   var totalLines = 0;
   var hitLines = 0;
   for (final rec in report.records) {
+    var continueRecord = false;
+    if (rec != null) {
+      for (final filePath in excludeFilePathList) {
+        if (rec.sourceFile.endsWith(filePath)) {
+          continueRecord = true;
+          break;
+        }
+      }
+    }
+    if (continueRecord) continue;
     for (final line in rec!.lines!.data) {
       totalLines++;
       hitLines += (line.executionCount > 0) ? 1 : 0;
     }
   }
   return hitLines / totalLines;
-}
-
-Future<void> excludeCoverage(String packageRoot, String excludeFilePath) async {
-  await Process.start(
-      'lcov',
-      [
-        '--remove',
-        'coverage/lcov.info',
-        excludeFilePath,
-        '-o',
-        'coverage/lcov.info'
-      ],
-      workingDirectory: packageRoot);
 }
 
 void generateBadge(Directory packageRoot, double lineCoverage) {
