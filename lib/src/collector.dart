@@ -26,6 +26,20 @@ double calculateLineCoverage(File lcovReport) {
   return hitLines / totalLines;
 }
 
+Future<void> excludeCoverage(
+    String packageRoot, File lcovReport, String excludeFilePath) async {
+  await Process.start(
+      'lcov',
+      [
+        '--remove',
+        lcovReport.path,
+        excludeFilePath,
+        '-o',
+        lcovReport.path,
+      ],
+      workingDirectory: packageRoot);
+}
+
 void generateBadge(Directory packageRoot, double lineCoverage) {
   const leftWidth = 59;
   final value = '${(lineCoverage * 100).floor()}%';
