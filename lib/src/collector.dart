@@ -26,16 +26,15 @@ double calculateLineCoverage(File lcovReport) {
   return hitLines / totalLines;
 }
 
-Future<void> excludeCoverage(
-    String packageRoot, File lcovReport, String excludeFilePath) async {
+Future<void> excludeCoverage(String packageRoot, String excludeFilePath) async {
   await Process.start(
       'lcov',
       [
         '--remove',
-        path.join(packageRoot, lcovReport.path),
-        path.join(packageRoot, excludeFilePath),
+        'coverage/lcov.info',
+        excludeFilePath,
         '-o',
-        path.join(packageRoot, lcovReport.path),
+        'coverage/lcov.info'
       ],
       workingDirectory: packageRoot);
 }

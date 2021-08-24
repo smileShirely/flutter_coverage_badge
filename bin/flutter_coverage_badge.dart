@@ -32,7 +32,7 @@ Future main(List<String> args) async {
   final lineCoverage = calculateLineCoverage(coverageFile);
 
   for (final excludeItem in excludeList) {
-    await excludeCoverage(Directory.current.path, coverageFile, excludeItem);
+    await excludeCoverage(Directory.current.path, excludeItem);
   }
 
   generateBadge(package, lineCoverage);
