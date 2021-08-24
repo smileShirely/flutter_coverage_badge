@@ -32,10 +32,10 @@ Future<void> excludeCoverage(
       'lcov',
       [
         '--remove',
-        lcovReport.path,
-        excludeFilePath,
+        path.join(packageRoot, lcovReport.path),
+        path.join(packageRoot, excludeFilePath),
         '-o',
-        lcovReport.path,
+        path.join(packageRoot, lcovReport.path),
       ],
       workingDirectory: packageRoot);
 }
